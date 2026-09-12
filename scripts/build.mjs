@@ -15,6 +15,8 @@ const articles = readdirSync(articlesDir)
   .filter((a) => a.published)
   .sort((a, b) => b.date.localeCompare(a.date));
 
+const catLabel = (a) => (site.categories.find((c) => c.slug === a.categorySlug) || {}).label || a.category;
+const catsWithArticles = site.categories.filter((c) => articles.some((a) => a.categorySlug === c.slug));
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const year = new Date().getFullYear();
 const pages = [];
@@ -47,7 +49,7 @@ function blocksHtml(blocks) {
 function articleCard(a, r) {
   return `<article class="card">
   <a href="${r}articles/${a.slug}/"><img src="${r}assets/images/${a.image}" alt="${esc(a.imageAlt)}" loading="lazy" width="600" height="600"></a>
-  <div class="card-body"><span class="tag">${esc(a.category)}</span><h3><a href="${r}articles/${a.slug}/">${esc(a.title)}</a></h3></div>
+  <div class="card-body"><a class="tag" href="${r}topics/${a.categorySlug}/">${esc(catLabel(a))}</a><h3><a href="${r}articles/${a.slug}/">${esc(a.title)}</a></h3></div>
 </article>`;
 }
 
@@ -58,7 +60,8 @@ function add(path, { title, description, body, jsonld = [], form = false, wide =
 function render({ path, title, description, body, jsonld, form, wide }) {
   const depth = path === '' ? 0 : path.split('/').length;
   const r = depth ? '../'.repeat(depth) : './';
-  const section = path.split('/')[0];
+  const first = path.split('/')[0];
+  const section = first === 'topics' ? 'articles' : first;
   const fullTitle = path === '' ? site.h1 : `${title} | ${site.name}`;
   const nav = site.nav.map((n) => `<li><a href="${r}${n.path ? n.path + '/' : ''}"${n.path === section ? ' aria-current="page"' : ''}>${esc(n.label)}</a></li>`).join('');
   const ld = jsonld.map((o) => `<script type="application/ld+json">${JSON.stringify(o)}</script>`).join('\n');
@@ -127,38 +130,41 @@ add('', {
   wide: true,
   body: (r) => `
 <section class="hero">
-  <img src="${r}assets/images/hero.jpg" alt="לאה גורא בתרגיל על מיטת רפורמר בסטודיו" width="1920" height="890" fetchpriority="high">
-</section>
-<div class="wrap home">
-  <h1>${esc(site.h1)}</h1>
-  <div class="home-grid">
-    <section class="panel">${formHtml()}</section>
-    <section class="suits">
-      <h2>למי זה מתאים?</h2>
-      <ul class="pills">${site.suitable.map((s) => `<li>${esc(s)}</li>`).join('')}</ul>
-      <p>${esc(site.suitableNote)}</p>
-    </section>
+  <div class="hero-band">
+    <h1>${esc(site.h1)}</h1>
+    <a class="hero-phone" href="${site.whatsappUrl}" target="_blank" rel="noopener">${waIcon}<span>${site.phoneDisplay}</span></a>
   </div>
-  <section class="band">
-    <h2><a href="${r}articles/">מאמרים וטיפים</a></h2>
-    <div class="cards">${articles.slice(0, 3).map((a) => articleCard(a, r)).join('')}</div>
-  </section>
-  <section class="band">
-    <h2><a href="${r}testimonials/">המלצות</a></h2>
-    <div class="shots">${site.testimonials.slice(0, 3).map((t) => `<img src="${r}assets/images/testimonials/${t.file}" alt="${esc(t.alt)}" loading="lazy">`).join('')}</div>
-  </section>
+  <img src="${r}assets/images/hero.jpg" alt="לאה גורא בתרגיל על מיטת רפורמר בסטודיו" width="1920" height="897" fetchpriority="high">
+</section>
+<div class="wrap narrow home">
+  <section class="panel">${formHtml()}</section>
 </div>`
 });
 
 // מאמרים וטיפים
-const categories = ['גב תחתון', 'צוואר', 'כתפיים', 'ברכיים', 'שיווי משקל', 'רצפת אגן'];
 add('articles', {
   title: 'מאמרים וטיפים',
+  wide: true,
   body: (r) => `
-<h1>מאמרים וטיפים</h1>
-<ul class="chips">${categories.map((c) => `<li>${esc(c)}</li>`).join('')}</ul>
-<div class="cards">${articles.map((a) => articleCard(a, r)).join('')}</div>`
+<div class="wrap">
+  <h1>מאמרים וטיפים</h1>
+  <ul class="chips">${catsWithArticles.map((c) => `<li><a href="${r}topics/${c.slug}/">${esc(c.label)}</a></li>`).join('')}</ul>
+  <ul class="article-list">${site.categories.flatMap((c) => articles.filter((a) => a.categorySlug === c.slug)).map((a) => `<li><a href="${r}articles/${a.slug}/"><img src="${r}assets/images/${a.image}" alt="" loading="lazy" width="96" height="96"><span><span class="tag">${esc(catLabel(a))}</span><strong>${esc(a.title)}</strong></span></a></li>`).join('')}</ul>
+</div>`
 });
+
+for (const c of catsWithArticles) {
+  add(`topics/${c.slug}`, {
+    title: c.label,
+    wide: true,
+    body: (r) => `
+<div class="wrap">
+  <h1>${esc(c.label)}</h1>
+  <ul class="chips">${catsWithArticles.map((x) => `<li><a href="${r}topics/${x.slug}/"${x.slug === c.slug ? ' aria-current="page"' : ''}>${esc(x.label)}</a></li>`).join('')}</ul>
+  <div class="cards">${articles.filter((a) => a.categorySlug === c.slug).map((a) => articleCard(a, r)).join('')}</div>
+</div>`
+  });
+}
 
 for (const a of articles) {
   add(`articles/${a.slug}`, {
@@ -168,7 +174,7 @@ for (const a of articles) {
     jsonld: [{ '@context': 'https://schema.org', '@type': 'Article', headline: a.title, datePublished: a.date, image: `${site.baseUrl}/assets/images/${a.image}`, author: { '@type': 'Person', name: 'לאה גורא' }, publisher: { '@type': 'Organization', name: site.name } }],
     body: (r) => `
 <article class="article">
-  <span class="tag">${esc(a.category)}</span>
+  <a class="tag" href="${r}topics/${a.categorySlug}/">${esc(catLabel(a))}</a>
   <h1>${esc(a.title)}</h1>
   <img class="article-img" src="${r}assets/images/${a.image}" alt="${esc(a.imageAlt)}">
   ${blocksHtml(a.blocks)}
@@ -183,7 +189,7 @@ add('about', {
   title: 'קצת עליי',
   body: (r) => `
 <h1>קצת עליי</h1>
-<img class="portrait" src="${r}assets/images/leah.jpg" alt="לאה גורא" width="1377" height="918">
+${site.about.image ? `<img class="portrait" src="${r}assets/images/${site.about.image}" alt="לאה גורא">` : ''}
 ${site.about.paragraphs.map((p) => `<p>${esc(p)}</p>`).join('\n')}`
 });
 
@@ -218,7 +224,7 @@ add('testimonials', {
   title: 'המלצות',
   body: (r) => `
 <h1>המלצות</h1>
-<div class="shots">${site.testimonials.map((t) => `<img src="${r}assets/images/testimonials/${t.file}" alt="${esc(t.alt)}" loading="lazy">`).join('')}</div>`
+<div class="shots">${site.testimonials.map((t) => `<figure class="shot"><img src="${r}assets/images/testimonials/${t.file}" alt="${esc(t.alt)}" loading="lazy">${t.caption ? `<figcaption>${esc(t.caption)}</figcaption>` : ''}</figure>`).join('')}</div>`
 });
 
 // שאלות ותשובות

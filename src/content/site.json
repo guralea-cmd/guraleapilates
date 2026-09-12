@@ -29,6 +29,18 @@
     "callbackOptions": ["בוקר", "צהריים", "ערב"],
     "submit": "שלחי"
   },
+  "categories": [
+    { "slug": "herniated-disc", "label": "בקע דיסק" },
+    { "slug": "back-pain", "label": "כאבי גב" },
+    { "slug": "fibromyalgia", "label": "פיברומיאלגיה" },
+    { "slug": "arthritis", "label": "דלקות מפרקים" },
+    { "slug": "joint-replacement", "label": "אחרי ניתוחי החלפת מפרק" },
+    { "slug": "osteoporosis", "label": "אוסטאופורוזיס" },
+    { "slug": "urinary-incontinence", "label": "בריחת שתן" },
+    { "slug": "balance", "label": "קושי בשיווי משקל" },
+    { "slug": "frozen-shoulder", "label": "כתף קפואה" },
+    { "slug": "neck-pain", "label": "כאבי צוואר" }
+  ],
   "suitable": ["בקע דיסק", "כאבי גב", "פיברומיאלגיה", "דלקות מפרקים", "אחרי ניתוחי החלפת מפרק", "אוסטאופורוזיס", "בריחת שתן", "קושי בשיווי משקל", "כתף קפואה"],
   "suitableNote": "כל מקרה נבדק בשיחת טלפון.",
   "about": {
@@ -63,6 +75,8 @@
     ]
   },
   "testimonials": [
+    { "file": "orly-gaz.jpg", "alt": "המלצה של אורלי גז", "caption": "אורלי גז" },
+    { "file": "200.jpg", "alt": "המלצה של אורלי גז" },
     { "file": "354.jpg", "alt": "המלצה של מתאמנת בסטודיו" },
     { "file": "214.jpg", "alt": "המלצה של מתאמנת בסטודיו" },
     { "file": "199.jpg", "alt": "המלצה של מתאמנת בסטודיו" }
