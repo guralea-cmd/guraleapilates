@@ -50,7 +50,8 @@ p { margin: 0 0 14px; }
 @media (max-width: 900px) {
   .top-inner { flex-wrap: wrap; min-height: 0; padding-top: 10px; gap: 4px; }
   .menu-btn { display: none; }
-  .nav { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .top-inner > * { min-width: 0; }
+  .nav { flex: 1 1 100%; width: 100%; min-width: 0; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .nav::-webkit-scrollbar { display: none; }
   .nav ul { flex-wrap: nowrap; gap: 18px; padding: 2px 0 8px; }
   .nav a { white-space: nowrap; font-size: 15px; }
