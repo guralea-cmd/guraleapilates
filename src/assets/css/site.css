@@ -121,13 +121,6 @@ p { margin: 0 0 14px; }
 .shot { margin: 0; display: grid; gap: 6px; }
 .shot figcaption { font-family: "Rubik", "Assistant", Arial, sans-serif; font-weight: 600; font-size: 18px; text-align: center; }
 
-/* schedule */
-.table-wrap { overflow-x: auto; }
-table { border-collapse: collapse; width: 100%; min-width: 420px; font-variant-numeric: tabular-nums; }
-th, td { border: 1px solid var(--line); padding: 10px 6px; text-align: center; }
-th { background: var(--soft); font-family: "Rubik", Arial, sans-serif; }
-td { height: 44px; }
-
 /* faq */
 .faq { margin: 0 0 40px; border-top: 1px solid var(--line); }
 .faq div { padding: 14px 0; border-bottom: 1px solid var(--line); }

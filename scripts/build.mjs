@@ -29,7 +29,6 @@ function formHtml(heading = site.form.heading) {
   ${heading ? `<h2 class="form-title">${esc(heading)}</h2>` : ''}
   <label>${esc(f.name)}<input type="text" name="name" autocomplete="name" required></label>
   <label>${esc(f.phone)}<input type="tel" name="phone" autocomplete="tel" inputmode="tel" required></label>
-  <label>${esc(f.callback)}<select name="callbackTime" required><option value="" disabled selected>${esc(f.callbackPlaceholder)}</option>${f.callbackOptions.map((o) => `<option value="${esc(o)}">${esc(o)}</option>`).join('')}</select></label>
   <button type="submit" class="btn">${esc(f.submit)}</button>
   <p class="form-status" aria-live="polite"></p>
 </form>`;
@@ -203,20 +202,6 @@ add('studio', {
   <p>${esc(site.studio.intro)}</p>
   <div class="gallery">${site.studio.images.map((i) => `<img src="${r}assets/images/studio/${i.file}" alt="${esc(i.alt)}" loading="lazy">`).join('')}</div>
 </div>`
-});
-
-// לוח שיעורים
-add('schedule', {
-  title: 'לוח שיעורים',
-  body: () => `
-<h1>לוח שיעורים</h1>
-<div class="table-wrap">
-  <table>
-    <thead><tr>${site.schedule.days.map((d) => `<th scope="col">${esc(d)}</th>`).join('')}</tr></thead>
-    <tbody>${site.schedule.rows.length ? site.schedule.rows.map((row) => `<tr>${row.map((c) => `<td>${esc(c)}</td>`).join('')}</tr>`).join('') : `<tr>${site.schedule.days.map(() => '<td></td>').join('')}</tr>`}</tbody>
-  </table>
-</div>
-${site.schedule.rows.length ? '' : `<p class="muted">${esc(site.schedule.emptyNote)}</p>`}`
 });
 
 // המלצות
