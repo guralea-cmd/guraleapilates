@@ -192,13 +192,22 @@ for (const a of articles) {
   });
 }
 
-// קצת עליי
+// קצת עליי - text and video side by side on wide screens, stacked on phones
+const aboutVideo = site.about.video;
 add('about', {
   title: 'קצת עליי',
+  wide: true,
   body: (r) => `
-<h1>קצת עליי</h1>
+<div class="wrap">
+  <h1>קצת עליי</h1>
+  <div class="about-grid">
+    <div class="about-text">
 ${site.about.image ? `<img class="portrait" src="${r}assets/images/${site.about.image}" alt="לאה גורא">` : ''}
-${site.about.paragraphs.map((p) => `<p>${esc(p)}</p>`).join('\n')}`
+${site.about.paragraphs.map((p) => `<p>${esc(p)}</p>`).join('\n')}
+    </div>
+${aboutVideo ? `    <div class="about-video"><video controls preload="metadata" playsinline poster="${r}assets/images/${aboutVideo.poster}" width="${aboutVideo.width}" height="${aboutVideo.height}"><source src="${r}assets/videos/${aboutVideo.file}" type="video/mp4"></video></div>` : ''}
+  </div>
+</div>`
 });
 
 // הסטודיו

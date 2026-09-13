@@ -123,6 +123,13 @@ p { margin: 0 0 14px; }
 
 /* about, studio, testimonials */
 .portrait { border-radius: var(--radius); margin-bottom: 20px; }
+.about-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 340px); gap: 32px; align-items: start; margin-bottom: 40px; }
+.about-text p { max-width: 68ch; margin-top: 0; }
+.about-video video { display: block; width: 100%; height: auto; border-radius: var(--radius); background: #000; }
+@media (max-width: 820px) {
+  .about-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .about-video { width: min(100%, 360px); margin-inline: auto; }
+}
 .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin: 20px 0 40px; }
 .gallery img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 8px; }
 .shots { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
