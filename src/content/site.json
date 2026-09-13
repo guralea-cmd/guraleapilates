@@ -10,6 +10,12 @@
   "email": "guralea@gmail.com",
   "facebookUrl": "https://www.facebook.com/profile.php?id=100028127156145",
   "instagramUrl": "https://www.instagram.com/lea_gura_pilates/",
+  "community": {
+    "name": "הגיל הוא לא הסיפור",
+    "url": "https://guralea.com",
+    "facebookUrl": "https://www.facebook.com/1190716140784281",
+    "instagramUrl": "https://www.instagram.com/lea_gura/"
+  },
   "nav": [
     { "path": "", "label": "בית" },
     { "path": "articles", "label": "מאמרים וטיפים" },

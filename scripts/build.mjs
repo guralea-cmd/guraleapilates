@@ -23,6 +23,9 @@ const pages = [];
 
 const waIcon = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7a11.4 11.4 0 0 1-4.4-3.9c-.3-.5-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.4.6-.3.4c-.1.1-.2.3-.1.5.2.3.7 1.2 1.5 1.9 1 .9 1.9 1.2 2.2 1.3.2.1.4.1.5-.1l.8-.9c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.4.3.1.1.1.6-.1 1.2z"/></svg>';
 
+const fbIcon = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13.5 21v-7.5h2.5l.4-3h-2.9V8.6c0-.9.3-1.5 1.5-1.5h1.5V4.4c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8v2.4H8v3h2.6V21h2.9z"/></svg>';
+const igIcon = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 7.3A4.7 4.7 0 1 0 16.7 12 4.7 4.7 0 0 0 12 7.3zm0 7.7a3 3 0 1 1 3-3 3 3 0 0 1-3 3zm6-7.9a1.1 1.1 0 1 1-1.1-1.1A1.1 1.1 0 0 1 18 7.1zM21.9 8.2a5.4 5.4 0 0 0-1.5-3.8 5.4 5.4 0 0 0-3.8-1.5C15.1 2.8 8.9 2.8 7.4 2.9a5.4 5.4 0 0 0-3.8 1.5 5.4 5.4 0 0 0-1.5 3.8c-.1 1.5-.1 7.7 0 9.2a5.4 5.4 0 0 0 1.5 3.8 5.4 5.4 0 0 0 3.8 1.5c1.5.1 7.7.1 9.2 0a5.4 5.4 0 0 0 3.8-1.5 5.4 5.4 0 0 0 1.5-3.8c.1-1.5.1-7.7 0-9.2zm-2.1 10.8a3 3 0 0 1-1.7 1.7c-1.2.5-4 .4-5.3.4s-4.1.1-5.3-.4a3 3 0 0 1-1.7-1.7c-.5-1.2-.4-4-.4-5.3s-.1-4.1.4-5.3a3 3 0 0 1 1.7-1.7c1.2-.5 4-.4 5.3-.4s4.1-.1 5.3.4a3 3 0 0 1 1.7 1.7c.5 1.2.4 4 .4 5.3s.1 4.1-.4 5.3z"/></svg>';
+
 function formHtml(heading = site.form.heading) {
   const f = site.form;
   return `<form class="lead-form" data-lead-form novalidate>
@@ -88,6 +91,11 @@ ${ld}
     <a class="logo" href="${r}">לאה גורא<span>פילאטיס מכשירים</span></a>
     <button class="menu-btn" aria-expanded="false" aria-controls="nav" aria-label="תפריט"><span></span><span></span><span></span></button>
     <nav id="nav" class="nav" aria-label="ניווט ראשי"><ul>${nav}</ul></nav>
+    <div class="top-links">
+      <a class="pill-link" href="${site.community.url}" target="_blank" rel="noopener">${esc(site.community.name)}</a>
+      <a class="icon-link" href="${site.facebookUrl}" target="_blank" rel="noopener" aria-label="פייסבוק - לאה גורא פילאטיס מכשירים ברמלה">${fbIcon}</a>
+      <a class="icon-link" href="${site.instagramUrl}" target="_blank" rel="noopener" aria-label="אינסטגרם - lea_gura_pilates">${igIcon}</a>
+    </div>
   </div>
 </header>
 <main id="main" class="${wide ? '' : 'wrap narrow'}">
@@ -96,7 +104,8 @@ ${body(r)}
 <footer class="foot">
   <div class="wrap foot-inner">
     <p>© ${year} לאה גורא | כל הזכויות שמורות</p>
-    <p><a href="${r}accessibility/">הצהרת נגישות</a> · <a href="${site.facebookUrl}" target="_blank" rel="noopener">עקבו אחרינו בפייסבוק - הסטודיו</a> · <a href="${site.instagramUrl}" target="_blank" rel="noopener">עקבו אחרינו באינסטגרם - הסטודיו</a></p>
+    <p class="foot-links"><a href="${r}accessibility/">הצהרת נגישות</a> <a href="${site.facebookUrl}" target="_blank" rel="noopener">${fbIcon}עקבו אחרינו בפייסבוק - הסטודיו</a> <a href="${site.instagramUrl}" target="_blank" rel="noopener">${igIcon}עקבו אחרינו באינסטגרם - הסטודיו</a></p>
+    <p class="foot-links"><a href="${site.community.url}" target="_blank" rel="noopener">${esc(site.community.name)}</a> <a href="${site.community.facebookUrl}" target="_blank" rel="noopener">${fbIcon}עקבו אחרינו בפייסבוק - ${esc(site.community.name)}</a> <a href="${site.community.instagramUrl}" target="_blank" rel="noopener">${igIcon}עקבו אחרינו באינסטגרם - ${esc(site.community.name)}</a></p>
   </div>
 </footer>
 <a class="wa" href="${site.whatsappUrl}" target="_blank" rel="noopener" aria-label="וואטסאפ ${site.phoneDisplay}">${waIcon}<span>${site.phoneDisplay}</span></a>
