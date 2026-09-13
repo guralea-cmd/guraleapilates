@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.querySelectorAll('[data-lead-form]').forEach(function (form) {
     var status = form.querySelector('.form-status');
+    form.addEventListener('input', function () {
+      if (typeof gtag === 'function') gtag('event', 'form_start', { form_name: 'pilates_lead' });
+    }, { once: true });
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       if (!form.checkValidity()) { form.reportValidity(); return; }
@@ -41,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       }).then(function () {
         status.textContent = 'הפרטים נשלחו, תודה.';
+        if (typeof gtag === 'function') gtag('event', 'generate_lead', { form_name: 'pilates_lead', page_path: window.location.pathname });
         form.reset();
       }).catch(function (err) {
         console.error(err);

@@ -70,6 +70,16 @@ function render({ path, title, description, body, jsonld, form, wide }) {
   return `<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+${site.ga4Id ? `<!-- Google tag (gtag.js) - skipped on ?_scan=1 like guralea.com -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=${site.ga4Id}"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+if (location.search.indexOf('_scan=1') === -1) {
+gtag('config', '${site.ga4Id}');
+}
+</script>` : ''}
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(fullTitle)}</title>
