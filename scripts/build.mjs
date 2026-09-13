@@ -252,6 +252,7 @@ for (const p of pages) {
   writeFileSync(join(dir, 'index.html'), render(p), 'utf8');
 }
 writeFileSync(join(dist, '.nojekyll'), '');
+writeFileSync(join(dist, 'CNAME'), 'guraleapilates.com\n');
 writeFileSync(join(dist, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${site.baseUrl}/sitemap.xml\n`);
 writeFileSync(join(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map((p) => `  <url><loc>${site.baseUrl}/${p.path ? p.path + '/' : ''}</loc></url>`).join('\n')}\n</urlset>\n`);
 console.log(`built ${pages.length} pages -> dist/`);
