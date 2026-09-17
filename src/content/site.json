@@ -26,6 +26,7 @@
     { "path": "faq", "label": "שאלות ותשובות" },
     { "path": "contact", "label": "יצירת קשר" }
   ],
+  "readMore": "המשך לקרוא",
   "form": {
     "heading": "תשאירי מספר טלפון ונחזור אלייך בהקדם עם כל הפרטים",
     "name": "שם מלא",
@@ -42,7 +43,12 @@
     { "slug": "urinary-incontinence", "label": "בריחת שתן" },
     { "slug": "balance", "label": "קושי בשיווי משקל" },
     { "slug": "frozen-shoulder", "label": "כתף קפואה" },
-    { "slug": "neck-pain", "label": "כאבי צוואר" }
+    { "slug": "neck-pain", "label": "כאבי צוואר" },
+    { "slug": "sports-injuries", "label": "פציעות ספורט" },
+    { "slug": "kyphosis", "label": "קיפוזיס" },
+    { "slug": "scoliosis", "label": "עקמת" },
+    { "slug": "fractures", "label": "שברים" },
+    { "slug": "stress-fractures", "label": "סדקים" }
   ],
   "suitable": ["בקע דיסק", "כאבי גב", "פיברומיאלגיה", "דלקות מפרקים", "אחרי ניתוחי החלפת מפרק", "אוסטאופורוזיס", "בריחת שתן", "קושי בשיווי משקל", "כתף קפואה"],
   "suitableNote": "כל מקרה נבדק בשיחת טלפון.",

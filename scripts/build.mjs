@@ -1,5 +1,7 @@
-// Builds the static pages of guraleapilates.com from the content files in src/content into dist/.
-// Phase 1: content comes from JSON files. Phase 2: the same renderers will read from Firestore (admin panel).
+// Builds the static pages of guraleapilates.com from the content in src/content into dist/.
+// Articles, testimonials and FAQ come from the JSON files by default, or from Firestore (what the admin panel
+// in src/admin edits) when CONTENT_SOURCE=firestore - both give the renderers the same objects, and the
+// pages are always pre-rendered HTML.
 import { readFileSync, writeFileSync, mkdirSync, cpSync, rmSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -8,16 +10,39 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const src = join(root, 'src');
 const dist = join(root, 'dist');
 const site = JSON.parse(readFileSync(join(src, 'content', 'site.json'), 'utf8'));
-const articlesDir = join(src, 'content', 'articles');
-const articles = readdirSync(articlesDir)
-  .filter((f) => f.endsWith('.json'))
-  .map((f) => JSON.parse(readFileSync(join(articlesDir, f), 'utf8')))
+let articles = [];
+let stopped = null; // set when Firestore content can't be used - then nothing is written to dist/
+if (process.env.CONTENT_SOURCE === 'firestore') {
+  try {
+    const { loadSiteContent } = await import('./firestore-rest.mjs');
+    const content = await loadSiteContent();
+    for (const [name, list] of Object.entries(content)) {
+      // an empty or unreachable database must never empty the live site
+      if (!list.length && !process.env.ALLOW_EMPTY) throw new Error(`Firestore returned no ${name} (ALLOW_EMPTY=1 overrides)`);
+    }
+    articles = content.articles;
+    site.testimonials = content.testimonials;
+    site.faq = content.faq;
+    console.log(`content from Firestore: ${articles.length} articles, ${site.testimonials.length} testimonials, ${site.faq.length} faq`);
+  } catch (err) {
+    // reported at the end instead of rethrown: exiting on a thrown error right after fetch crashes Node on Windows
+    stopped = err;
+  }
+} else {
+  const articlesDir = join(src, 'content', 'articles');
+  articles = readdirSync(articlesDir)
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => JSON.parse(readFileSync(join(articlesDir, f), 'utf8')));
+}
+articles = articles
   .filter((a) => a.published)
   .sort((a, b) => b.date.localeCompare(a.date));
 
 const catLabel = (a) => (site.categories.find((c) => c.slug === a.categorySlug) || {}).label || a.category;
 const catsWithArticles = site.categories.filter((c) => articles.some((a) => a.categorySlug === c.slug));
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+// An image is a file name under `base` (JSON content) or a full URL (uploaded in the admin panel to Firebase Storage).
+const imgUrl = (base, file) => (/^https?:\/\//.test(file) ? file : base + file);
 const year = new Date().getFullYear();
 const pages = [];
 
@@ -50,7 +75,7 @@ function blocksHtml(blocks) {
 
 function articleCard(a, r) {
   return `<article class="card">
-  <a href="${r}articles/${a.slug}/"><img src="${r}assets/images/${a.image}" alt="${esc(a.imageAlt)}" loading="lazy" width="600" height="600"></a>
+  <a href="${r}articles/${a.slug}/"><img src="${esc(imgUrl(`${r}assets/images/`, a.image))}" alt="${esc(a.imageAlt)}" loading="lazy" width="600" height="600"></a>
   <div class="card-body"><a class="tag" href="${r}topics/${a.categorySlug}/">${esc(catLabel(a))}</a><h3><a href="${r}articles/${a.slug}/">${esc(a.title)}</a></h3></div>
 </article>`;
 }
@@ -140,6 +165,14 @@ const business = {
   sameAs: [site.facebookUrl, site.instagramUrl]
 };
 
+// The weekly main article on the home page (Leah 17.9): the newest article marked "featured".
+const featured = articles.find((a) => a.featured);
+// its opening - every block before the first sub-heading
+const teaserBlocks = (a) => {
+  const i = a.blocks.findIndex((b) => b.h2);
+  return i === -1 ? a.blocks.slice(0, 3) : a.blocks.slice(0, i);
+};
+
 // בית
 add('', {
   description: site.description,
@@ -154,9 +187,21 @@ add('', {
   </div>
   <img src="${r}assets/images/hero.jpg" alt="לאה גורא בתרגיל על מיטת רפורמר בסטודיו" width="1920" height="897" fetchpriority="high">
 </section>
-<div class="wrap narrow home">
+${featured ? `<div class="wrap home-feature">
+  <article class="feature">
+    <a class="tag" href="${r}topics/${featured.categorySlug}/">${esc(catLabel(featured))}</a>
+    <h2><a href="${r}articles/${featured.slug}/">${esc(featured.title)}</a></h2>
+    <a href="${r}articles/${featured.slug}/"><img class="feature-img" src="${esc(imgUrl(`${r}assets/images/`, featured.image))}" alt="${esc(featured.imageAlt)}" width="1080" height="1080"></a>
+    ${blocksHtml(teaserBlocks(featured))}
+    <a class="btn read-more" href="${r}articles/${featured.slug}/">${esc(site.readMore)}</a>
+  </article>
+  <aside class="feature-side">
+    <section class="panel">${formHtml()}</section>
+    <a class="side-wa" href="${site.whatsappUrl}" target="_blank" rel="noopener">${waIcon}<span>${site.phoneDisplay}</span></a>
+  </aside>
+</div>` : `<div class="wrap narrow home">
   <section class="panel">${formHtml()}</section>
-</div>`
+</div>`}`
 });
 
 // מאמרים וטיפים
@@ -167,7 +212,7 @@ add('articles', {
 <div class="wrap">
   <h1>מאמרים וטיפים</h1>
   <ul class="chips">${catsWithArticles.map((c) => `<li><a href="${r}topics/${c.slug}/">${esc(c.label)}</a></li>`).join('')}</ul>
-  <ul class="article-list">${site.categories.flatMap((c) => articles.filter((a) => a.categorySlug === c.slug)).map((a) => `<li><a href="${r}articles/${a.slug}/"><img src="${r}assets/images/${a.image}" alt="" loading="lazy" width="96" height="96"><span><span class="tag">${esc(catLabel(a))}</span><strong>${esc(a.title)}</strong></span></a></li>`).join('')}</ul>
+  <ul class="article-list">${site.categories.flatMap((c) => articles.filter((a) => a.categorySlug === c.slug)).map((a) => `<li><a href="${r}articles/${a.slug}/"><img src="${esc(imgUrl(`${r}assets/images/`, a.image))}" alt="" loading="lazy" width="96" height="96"><span><span class="tag">${esc(catLabel(a))}</span><strong>${esc(a.title)}</strong></span></a></li>`).join('')}</ul>
 </div>`
 });
 
@@ -189,12 +234,12 @@ for (const a of articles) {
     title: a.title,
     description: a.blocks.find((b) => b.lines)?.lines.join(' '),
     form: true,
-    jsonld: [{ '@context': 'https://schema.org', '@type': 'Article', headline: a.title, datePublished: a.date, image: `${site.baseUrl}/assets/images/${a.image}`, author: { '@type': 'Person', name: 'לאה גורא' }, publisher: { '@type': 'Organization', name: site.name } }],
+    jsonld: [{ '@context': 'https://schema.org', '@type': 'Article', headline: a.title, datePublished: a.date, image: imgUrl(`${site.baseUrl}/assets/images/`, a.image), author: { '@type': 'Person', name: 'לאה גורא' }, publisher: { '@type': 'Organization', name: site.name } }],
     body: (r) => `
 <article class="article">
   <a class="tag" href="${r}topics/${a.categorySlug}/">${esc(catLabel(a))}</a>
   <h1>${esc(a.title)}</h1>
-  <img class="article-img" src="${r}assets/images/${a.image}" alt="${esc(a.imageAlt)}">
+  <img class="article-img" src="${esc(imgUrl(`${r}assets/images/`, a.image))}" alt="${esc(a.imageAlt)}">
   ${blocksHtml(a.blocks)}
   <p class="cta">${esc(a.cta)}</p>
   <section class="panel">${formHtml('')}</section>
@@ -237,7 +282,7 @@ add('testimonials', {
   title: 'המלצות',
   body: (r) => `
 <h1>המלצות</h1>
-<div class="shots">${site.testimonials.map((t) => `<figure class="shot"><img src="${r}assets/images/testimonials/${t.file}" alt="${esc(t.alt)}" loading="lazy">${t.caption ? `<figcaption>${esc(t.caption)}</figcaption>` : ''}</figure>`).join('')}</div>`
+<div class="shots">${site.testimonials.map((t) => `<figure class="shot"><img src="${esc(imgUrl(`${r}assets/images/testimonials/`, t.file))}" alt="${esc(t.alt)}" loading="lazy">${t.caption ? `<figcaption>${esc(t.caption)}</figcaption>` : ''}</figure>`).join('')}</div>`
 });
 
 // שאלות ותשובות
@@ -271,16 +316,21 @@ add('accessibility', {
 ${site.accessibility.map((b) => (b.h2 ? `<h2>${esc(b.h2)}</h2>` : `<p>${esc(b.p)}</p>`)).join('\n')}`
 });
 
-rmSync(dist, { recursive: true, force: true });
-mkdirSync(dist, { recursive: true });
-cpSync(join(src, 'assets'), join(dist, 'assets'), { recursive: true });
-for (const p of pages) {
-  const dir = join(dist, p.path);
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, 'index.html'), render(p), 'utf8');
+if (stopped) {
+  console.error(`build stopped, dist/ left as it was: ${stopped.message}`);
+  process.exitCode = 1;
+} else {
+  rmSync(dist, { recursive: true, force: true });
+  mkdirSync(dist, { recursive: true });
+  cpSync(join(src, 'assets'), join(dist, 'assets'), { recursive: true });
+  for (const p of pages) {
+    const dir = join(dist, p.path);
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, 'index.html'), render(p), 'utf8');
+  }
+  writeFileSync(join(dist, '.nojekyll'), '');
+  writeFileSync(join(dist, 'CNAME'), 'guraleapilates.com\n');
+  writeFileSync(join(dist, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${site.baseUrl}/sitemap.xml\n`);
+  writeFileSync(join(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map((p) => `  <url><loc>${site.baseUrl}/${p.path ? p.path + '/' : ''}</loc></url>`).join('\n')}\n</urlset>\n`);
+  console.log(`built ${pages.length} pages -> dist/`);
 }
-writeFileSync(join(dist, '.nojekyll'), '');
-writeFileSync(join(dist, 'CNAME'), 'guraleapilates.com\n');
-writeFileSync(join(dist, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${site.baseUrl}/sitemap.xml\n`);
-writeFileSync(join(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map((p) => `  <url><loc>${site.baseUrl}/${p.path ? p.path + '/' : ''}</loc></url>`).join('\n')}\n</urlset>\n`);
-console.log(`built ${pages.length} pages -> dist/`);
