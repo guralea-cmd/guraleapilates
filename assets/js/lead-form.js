@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function () {
       if (LEADS_SHEET_WEBAPP_URL.indexOf('https://script.google.com/macros/s/') !== 0) return;
       fetch(LEADS_SHEET_WEBAPP_URL, {
         method: 'POST',
-        mode: 'no-cors',
         keepalive: true,
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({ form: 'pilates', id: lead.id || '', name: lead.name, phone: lead.phone })
