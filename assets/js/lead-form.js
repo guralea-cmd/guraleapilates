@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   var db = firebase.firestore();
 
-  // Copy of each lead to Leah's Google Sheet "לידים 2026 – סטודיו לאה גורא" (tab פייסבוק, מקור "אתר"),
+  // Copy of each lead to Leah's Google Sheet "לידים 2026 – סטודיו לאה גורא" (tab פייסבוק, מקור = where the visit came from, see site.js),
   // through the Apps Script web app kept in the Hagil-lo-hasipor repo: .claude/skills/leads-sheet/apps-script-webhook.gs.
   // Sent only after the Firestore save succeeded; fire-and-forget - never throws, never waits.
   // Web app deployed 14.9.2026 13:57 (version 1, runs as guralea@gmail.com, access: anyone).
@@ -26,9 +26,14 @@ document.addEventListener('DOMContentLoaded', function () {
         method: 'POST',
         keepalive: true,
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ form: 'pilates', id: lead.id || '', name: lead.name, phone: lead.phone })
+        body: JSON.stringify({ form: 'pilates', id: lead.id || '', name: lead.name, phone: lead.phone, source: leadSource() })
       }).catch(function () {});
     } catch (e) {}
+  }
+
+  // Saved by site.js on the visit's first page; 'אתר - ישיר' if storage is blocked.
+  function leadSource() {
+    try { return sessionStorage.getItem('lead_source') || 'אתר - ישיר'; } catch (e) { return 'אתר - ישיר'; }
   }
 
   function utm() {
