@@ -48,7 +48,8 @@
     { "slug": "kyphosis", "label": "קיפוזיס" },
     { "slug": "scoliosis", "label": "עקמת" },
     { "slug": "fractures", "label": "שברים" },
-    { "slug": "stress-fractures", "label": "סדקים" }
+    { "slug": "stress-fractures", "label": "סדקים" },
+    { "slug": "starting-over", "label": "מתחילות מחדש" }
   ],
   "suitable": ["בקע דיסק", "כאבי גב", "פיברומיאלגיה", "דלקות מפרקים", "אחרי ניתוחי החלפת מפרק", "אוסטאופורוזיס", "בריחת שתן", "קושי בשיווי משקל", "כתף קפואה"],
   "suitableNote": "כל מקרה נבדק בשיחת טלפון.",
