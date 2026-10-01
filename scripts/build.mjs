@@ -212,8 +212,28 @@ add('articles', {
 <div class="wrap">
   <h1>מאמרים וטיפים</h1>
   <ul class="chips">${catsWithArticles.map((c) => `<li><a href="${r}topics/${c.slug}/">${esc(c.label)}</a></li>`).join('')}</ul>
-  <ul class="article-list">${site.categories.flatMap((c) => articles.filter((a) => a.categorySlug === c.slug)).map((a) => `<li><a href="${r}articles/${a.slug}/"><img src="${esc(imgUrl(`${r}assets/images/`, a.image))}" alt="" loading="lazy" width="96" height="96"><span><span class="tag">${esc(catLabel(a))}</span><strong>${esc(a.title)}</strong></span></a></li>`).join('')}</ul>
-</div>`
+  <ul class="article-list" id="article-list">${site.categories.flatMap((c) => articles.filter((a) => a.categorySlug === c.slug)).map((a) => `<li data-slug="${a.slug}"><a href="${r}articles/${a.slug}/"><img src="${esc(imgUrl(`${r}assets/images/`, a.image))}" alt="" loading="lazy" width="96" height="96"><span><span class="tag">${esc(catLabel(a))}</span><strong>${esc(a.title)}</strong></span></a></li>`).join('')}</ul>
+</div>
+<script>
+// Instagram bio link lands here: move the articles of the 3 latest tip posts (07:30/12:30/19:30 cycle from 2.10.2026) to the top, newest first.
+(function () {
+  var ORDER = ${JSON.stringify(site.tipCycle || [])};
+  if (!ORDER.length) return;
+  var SLOTS = ['07:30', '12:30', '19:30'], now = Date.now(), n = -1;
+  for (var i = 0; i < 3 * 400; i++) {
+    var d = new Date(Date.UTC(2026, 9, 2 + Math.floor(i / 3))).toISOString().slice(0, 10);
+    var off = d >= '2026-10-25' && d < '2027-03-26' ? '+02:00' : '+03:00';
+    if (new Date(d + 'T' + SLOTS[i % 3] + ':00' + off).getTime() > now) break;
+    n = i;
+  }
+  if (n < 0) return;
+  var list = document.getElementById('article-list');
+  for (var k = Math.max(0, n - 2); k <= n; k++) {
+    var li = list.querySelector('li[data-slug="' + ORDER[k % ORDER.length] + '"]');
+    if (li) list.insertBefore(li, list.firstChild);
+  }
+})();
+</script>`
 });
 
 for (const c of catsWithArticles) {
