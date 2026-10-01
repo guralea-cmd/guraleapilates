@@ -80,11 +80,11 @@ function articleCard(a, r) {
 </article>`;
 }
 
-function add(path, { title, description, body, jsonld = [], form = false, wide = false }) {
-  pages.push({ path, title, description, body, jsonld, form, wide });
+function add(path, { title, description, body, jsonld = [], form = false, wide = false, ogImage }) {
+  pages.push({ path, title, description, body, jsonld, form, wide, ogImage });
 }
 
-function render({ path, title, description, body, jsonld, form, wide }) {
+function render({ path, title, description, body, jsonld, form, wide, ogImage }) {
   const depth = path === '' ? 0 : path.split('/').length;
   const r = depth ? '../'.repeat(depth) : './';
   const first = path.split('/')[0];
@@ -111,7 +111,7 @@ gtag('config', '${site.ga4Id}');
 ${description ? `<meta name="description" content="${esc(description)}">` : ''}
 <link rel="canonical" href="${site.baseUrl}/${path ? path + '/' : ''}">
 <meta property="og:title" content="${esc(fullTitle)}">
-<meta property="og:image" content="${site.baseUrl}/assets/images/hero.jpg">
+<meta property="og:image" content="${ogImage || site.baseUrl + '/assets/images/hero.jpg'}">
 <meta property="og:locale" content="he_IL">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -232,6 +232,7 @@ for (const c of catsWithArticles) {
 for (const a of articles) {
   add(`articles/${a.slug}`, {
     title: a.title,
+    ogImage: imgUrl(`${site.baseUrl}/assets/images/`, a.image),
     description: a.blocks.find((b) => b.lines)?.lines.join(' '),
     form: true,
     jsonld: [{ '@context': 'https://schema.org', '@type': 'Article', headline: a.title, datePublished: a.date, image: imgUrl(`${site.baseUrl}/assets/images/`, a.image), author: { '@type': 'Person', name: 'לאה גורא' }, publisher: { '@type': 'Organization', name: site.name } }],
