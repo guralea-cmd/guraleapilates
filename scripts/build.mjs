@@ -201,8 +201,47 @@ ${featured ? `<div class="wrap home-feature">
   </aside>
 </div>` : `<div class="wrap narrow home">
   <section class="panel">${formHtml()}</section>
-</div>`}`
+</div>`}
+${homeSections(r)}`
 });
+
+// Home sections under the weekly article (3.10.2026) - only existing site content; each heading = the nav label and links to its page.
+function homeSections(r) {
+  const label = (path) => esc((site.nav.find((n) => n.path === path) || {}).label || '');
+  const more = articles.filter((a) => a !== featured).slice(0, 3);
+  return `
+<section class="home-sec soft">
+  <div class="wrap about-teaser">
+    <img src="${r}assets/images/${aboutVideo ? aboutVideo.poster : 'leah.jpg'}" alt="לאה גורא" loading="lazy">
+    <div>
+      <h2><a href="${r}about/">${label('about')}</a></h2>
+      <p>${esc((site.about.paragraphs[0].match(/[^.]+\./g) || []).slice(0, 3).join('').trim())}</p>
+    </div>
+  </div>
+</section>
+<section class="home-sec">
+  <div class="wrap">
+    <h2><a href="${r}studio/">${label('studio')}</a></h2>
+    <p>${esc(site.about.paragraphs[site.about.paragraphs.length - 1])}</p>
+    <ul class="pills">${site.suitable.map((s) => `<li>${esc(s)}</li>`).join('')}</ul>
+    <p class="muted">${esc(site.suitableNote)}</p>
+    <p>${esc(site.studio.intro)}</p>
+    <div class="home-gallery">${['studio-reformer-room.jpg', 'studio-chairs-balls-group.jpg', 'studio-reformer-action.jpg', 'studio-chairs-standing-group.jpg'].map((f) => site.studio.images.find((i) => i.file === f)).filter(Boolean).map((i) => `<a href="${r}studio/"><img src="${r}assets/images/studio/${i.file}" alt="${esc(i.alt)}" loading="lazy"></a>`).join('')}</div>
+  </div>
+</section>
+<section class="home-sec soft">
+  <div class="wrap">
+    <h2><a href="${r}testimonials/">${label('testimonials')}</a></h2>
+    <div class="home-shots">${site.testimonials.slice(0, 4).map((t) => `<figure class="shot"><img src="${esc(imgUrl(`${r}assets/images/testimonials/`, t.file))}" alt="${esc(t.alt)}" loading="lazy">${t.caption ? `<figcaption>${esc(t.caption)}</figcaption>` : ''}</figure>`).join('')}</div>
+  </div>
+</section>
+${more.length ? `<section class="home-sec">
+  <div class="wrap">
+    <h2><a href="${r}articles/">${label('articles')}</a></h2>
+    <div class="cards">${more.map((a) => articleCard(a, r)).join('')}</div>
+  </div>
+</section>` : ''}`;
+}
 
 // מאמרים וטיפים
 add('articles', {
