@@ -383,14 +383,14 @@ add('pilates-ramla', {
   form: true,
   landing: true,
   body: (r) => `<div class="lp">
-  <h1>לאה גורא – פילאטיס מכשירים שיקומי ברמלה</h1>
+  <h1>החיים קצרים מדי בשביל שתסבלי</h1>
+  <h2>לאה גורא – פילאטיס מכשירים שיקומי ברמלה</h2>
   <p class="lp-sub">שיקום, עיצוב וחיטוב הגוף.</p>
   <p class="lp-area">${esc(site.area)}</p>
   <h2>למי זה מתאים</h2>
   <ul class="pills">${landingList.map((s) => `<li>${esc(s)}</li>`).join('')}</ul>
   <p class="muted">${esc(site.suitableNote)}</p>
   <section class="panel">${formHtml()}</section>
-  <h2>המלצות</h2>
   <video class="lp-video" controls playsinline preload="none" poster="${r}assets/images/three-trainees-poster.jpg" width="720" height="720"><source src="${r}assets/videos/three-trainees.mp4" type="video/mp4"></video>
   <section class="panel">${formHtml()}</section>
 </div>`
