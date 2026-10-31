@@ -153,7 +153,7 @@ ${landing ? '' : `<a class="wa" href="${site.whatsappUrl}" target="_blank" rel="
 <script src="${r}assets/js/site.js" defer></script>
 ${form ? `<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js" defer></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js" defer></script>
-<script src="${r}assets/js/lead-form.js" defer></script>` : ''}
+<script src="${r}assets/js/lead-form.js?v=2" defer></script>` : ''}
 </body>
 </html>
 `;
