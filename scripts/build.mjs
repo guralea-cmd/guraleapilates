@@ -391,7 +391,7 @@ add('pilates-ramla', {
   <ul class="pills">${landingList.map((s) => `<li>${esc(s)}</li>`).join('')}</ul>
   <p class="muted">${esc(site.suitableNote)}</p>
   <section class="panel">${formHtml()}</section>
-  <video class="lp-video" controls playsinline preload="none" poster="${r}assets/images/three-trainees-poster.jpg" width="720" height="720"><source src="${r}assets/videos/three-trainees.mp4" type="video/mp4"></video>
+  <video class="lp-video" controls playsinline preload="none" width="720" height="720"><source src="${r}assets/videos/three-trainees.mp4" type="video/mp4"></video>
   <section class="panel">${formHtml()}</section>
 </div>`
 });
