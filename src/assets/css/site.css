@@ -231,3 +231,4 @@ main:has(.home-sec) { padding-bottom: 0; }
 .lp .lead-form label { font-size: 17px; }
 .lp .lead-form input { font-size: 18px; min-height: 52px; padding: 12px 14px; }
 .lp .lead-form .btn { width: 100%; min-height: 58px; font-size: 22px; }
+.lp .form-status:empty { display: none; }
