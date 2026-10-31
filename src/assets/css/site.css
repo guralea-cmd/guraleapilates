@@ -215,3 +215,14 @@ main:has(.home-sec) { padding-bottom: 0; }
   .home-sec .card img { height: 100%; aspect-ratio: auto; min-height: 110px; }
   .home-sec .card h3 { font-size: 17px; }
 }
+
+/* landing page */
+.lp { text-align: center; padding-block: 18px 32px; }
+.lp h1 { font-size: clamp(26px, 7vw, 36px); margin: 0 0 8px; }
+.lp-sub { font-size: 19px; font-weight: 600; margin: 0 0 4px; }
+.lp-area { margin: 0 0 14px; }
+.lp .panel { text-align: right; margin-block: 14px; }
+.lp h2 { margin: 26px 0 10px; }
+.lp-video { display: block; width: min(100%, 460px); height: auto; margin-inline: auto; border-radius: var(--radius); background: #000; }
+.lp .pills { justify-content: center; }
+.top-links[hidden] { display: none; }

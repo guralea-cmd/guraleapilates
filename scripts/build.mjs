@@ -80,11 +80,11 @@ function articleCard(a, r) {
 </article>`;
 }
 
-function add(path, { title, description, body, jsonld = [], form = false, wide = false, ogImage }) {
-  pages.push({ path, title, description, body, jsonld, form, wide, ogImage });
+function add(path, { title, description, body, jsonld = [], form = false, wide = false, ogImage, landing = false }) {
+  pages.push({ path, title, description, body, jsonld, form, wide, ogImage, landing });
 }
 
-function render({ path, title, description, body, jsonld, form, wide, ogImage }) {
+function render({ path, title, description, body, jsonld, form, wide, ogImage, landing }) {
   const depth = path === '' ? 0 : path.split('/').length;
   const r = depth ? '../'.repeat(depth) : './';
   const first = path.split('/')[0];
@@ -107,6 +107,12 @@ gtag('config', '${site.ga4Id}');
 </script>` : ''}
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+${landing ? `<meta name="robots" content="noindex">
+<!-- Meta Pixel: landing page only -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+if (location.search.indexOf('_scan=1') === -1) { fbq('init', '1002367290734793'); fbq('track', 'PageView'); }
+</script>` : ''}
 <title>${esc(fullTitle)}</title>
 ${description ? `<meta name="description" content="${esc(description)}">` : ''}
 <link rel="canonical" href="${site.baseUrl}/${path ? path + '/' : ''}">
@@ -124,13 +130,13 @@ ${ld}
 <header class="top">
   <div class="wrap top-inner">
     <a class="logo" href="${r}">לאה גורא<span>פילאטיס מכשירים</span></a>
-    <button class="menu-btn" aria-expanded="false" aria-controls="nav" aria-label="תפריט"><span></span><span></span><span></span></button>
-    <nav id="nav" class="nav" aria-label="ניווט ראשי"><ul>${nav}</ul></nav>
-    <div class="top-links">
+    ${landing ? '' : `<button class="menu-btn" aria-expanded="false" aria-controls="nav" aria-label="תפריט"><span></span><span></span><span></span></button>
+    <nav id="nav" class="nav" aria-label="ניווט ראשי"><ul>${nav}</ul></nav>`}
+${landing ? '' : `<div class="top-links">
       <a class="pill-link" href="${site.community.url}" target="_blank" rel="noopener">${esc(site.community.name)}</a>
       <a class="icon-link" href="${site.facebookUrl}" target="_blank" rel="noopener" aria-label="פייסבוק - לאה גורא פילאטיס מכשירים ברמלה">${fbIcon}</a>
       <a class="icon-link" href="${site.instagramUrl}" target="_blank" rel="noopener" aria-label="אינסטגרם - lea_gura_pilates">${igIcon}</a>
-    </div>
+    </div>`}
   </div>
 </header>
 <main id="main" class="${wide ? '' : 'wrap narrow'}">
@@ -140,10 +146,10 @@ ${body(r)}
   <div class="wrap foot-inner">
     <p>© ${year} לאה גורא | כל הזכויות שמורות</p>
     <p class="foot-links"><a href="${r}accessibility/">הצהרת נגישות</a> <a href="${site.facebookUrl}" target="_blank" rel="noopener">${fbIcon}עקבו אחרינו בפייסבוק - הסטודיו</a> <a href="${site.instagramUrl}" target="_blank" rel="noopener">${igIcon}עקבו אחרינו באינסטגרם - הסטודיו</a></p>
-    <p class="foot-links"><a href="${site.community.url}" target="_blank" rel="noopener">${esc(site.community.name)}</a> <a href="${site.community.facebookUrl}" target="_blank" rel="noopener">${fbIcon}עקבו אחרינו בפייסבוק - ${esc(site.community.name)}</a> <a href="${site.community.instagramUrl}" target="_blank" rel="noopener">${igIcon}עקבו אחרינו באינסטגרם - ${esc(site.community.name)}</a></p>
+    ${landing ? '' : `<p class="foot-links"><a href="${site.community.url}" target="_blank" rel="noopener">${esc(site.community.name)}</a> <a href="${site.community.facebookUrl}" target="_blank" rel="noopener">${fbIcon}עקבו אחרינו בפייסבוק - ${esc(site.community.name)}</a> <a href="${site.community.instagramUrl}" target="_blank" rel="noopener">${igIcon}עקבו אחרינו באינסטגרם - ${esc(site.community.name)}</a></p>`}
   </div>
 </footer>
-<a class="wa" href="${site.whatsappUrl}" target="_blank" rel="noopener" aria-label="וואטסאפ ${site.phoneDisplay}">${waIcon}<span>${site.phoneDisplay}</span></a>
+${landing ? '' : `<a class="wa" href="${site.whatsappUrl}" target="_blank" rel="noopener" aria-label="וואטסאפ ${site.phoneDisplay}">${waIcon}<span>${site.phoneDisplay}</span></a>`}
 <script src="${r}assets/js/site.js" defer></script>
 ${form ? `<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js" defer></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js" defer></script>
@@ -369,6 +375,27 @@ add('contact', {
 });
 
 // הצהרת נגישות
+// Permanent landing page for paid ads (Leah 31.10.2026). No menu and no WhatsApp button: the one action is the form. noindex: ads only.
+const landingList = ['החלפת ירך וברך', 'פיברומיאלגיה', 'פריצות דיסק ובלט', 'כאבי גב', 'צפיפות עצם', 'עקמת', 'דלקות מפרקים', 'בריחת שתן', 'קושי בשיווי משקל', 'כתף קפואה'];
+add('pilates-ramla', {
+  title: 'פילאטיס מכשירים ברמלה',
+  description: 'פילאטיס מכשירים שיקומי ברמלה עם לאה גורא - שיקום, עיצוב וחיטוב הגוף.',
+  form: true,
+  landing: true,
+  body: (r) => `<div class="lp">
+  <h1>לאה גורא – פילאטיס מכשירים שיקומי ברמלה</h1>
+  <p class="lp-sub">שיקום, עיצוב וחיטוב הגוף.</p>
+  <p class="lp-area">${esc(site.area)}</p>
+  <h2>למי זה מתאים</h2>
+  <ul class="pills">${landingList.map((s) => `<li>${esc(s)}</li>`).join('')}</ul>
+  <p class="muted">${esc(site.suitableNote)}</p>
+  <section class="panel">${formHtml()}</section>
+  <h2>המלצות</h2>
+  <video class="lp-video" controls playsinline preload="none" poster="${r}assets/images/three-trainees-poster.jpg" width="720" height="720"><source src="${r}assets/videos/three-trainees.mp4" type="video/mp4"></video>
+  <section class="panel">${formHtml()}</section>
+</div>`
+});
+
 add('accessibility', {
   title: 'הצהרת נגישות',
   body: () => `
@@ -391,6 +418,6 @@ if (stopped) {
   writeFileSync(join(dist, '.nojekyll'), '');
   writeFileSync(join(dist, 'CNAME'), 'guraleapilates.com\n');
   writeFileSync(join(dist, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${site.baseUrl}/sitemap.xml\n`);
-  writeFileSync(join(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map((p) => `  <url><loc>${site.baseUrl}/${p.path ? p.path + '/' : ''}</loc></url>`).join('\n')}\n</urlset>\n`);
+  writeFileSync(join(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.filter((p) => !p.landing).map((p) => `  <url><loc>${site.baseUrl}/${p.path ? p.path + '/' : ''}</loc></url>`).join('\n')}\n</urlset>\n`);
   console.log(`built ${pages.length} pages -> dist/`);
 }

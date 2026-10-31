@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
         sendLeadToSheet({ id: ref && ref.id, name: form.name.value.trim(), phone: form.phone.value.trim() });
         status.textContent = 'הפרטים נשלחו, תודה.';
         if (typeof gtag === 'function') gtag('event', 'generate_lead', { form_name: 'pilates_lead', page_path: window.location.pathname });
+        if (typeof fbq === 'function') fbq('track', 'Lead');
         form.reset();
       }).catch(function (err) {
         console.error(err);
