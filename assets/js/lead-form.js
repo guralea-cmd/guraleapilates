@@ -26,7 +26,9 @@ document.addEventListener('DOMContentLoaded', function () {
         method: 'POST',
         keepalive: true,
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ form: 'pilates', id: lead.id || '', name: lead.name, phone: lead.phone, source: leadSource() })
+        // Leah 31.10.2026: every studio lead says פילאטיס in the sheet and the email subject, never mixed with the workshop.
+        // Test names (ניסיון/בדיקה) stay as they are so the sheet script keeps recognising them.
+        body: JSON.stringify({ form: 'pilates', id: lead.id || '', name: /^(ניסיון|בדיקה)/.test(lead.name) ? lead.name : 'פילאטיס - ' + lead.name, phone: lead.phone, source: leadSource() })
       }).catch(function () {});
     } catch (e) {}
   }
