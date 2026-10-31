@@ -129,7 +129,7 @@ ${ld}
 <a class="skip" href="#main">דלג לתוכן הראשי</a>
 <header class="top">
   <div class="wrap top-inner">
-    <a class="logo" href="${r}">לאה גורא<span>פילאטיס מכשירים</span></a>
+    <a class="logo" href="${r}">לאה גורא<span>פילאטיס מכשירים${landing ? " ברמלה" : ""}</span></a>
     ${landing ? '' : `<button class="menu-btn" aria-expanded="false" aria-controls="nav" aria-label="תפריט"><span></span><span></span><span></span></button>
     <nav id="nav" class="nav" aria-label="ניווט ראשי"><ul>${nav}</ul></nav>`}
 ${landing ? '' : `<div class="top-links">
