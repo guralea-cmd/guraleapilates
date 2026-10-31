@@ -122,7 +122,7 @@ ${description ? `<meta name="description" content="${esc(description)}">` : ''}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&family=Rubik:wght@500;600;700&display=swap">
-<link rel="stylesheet" href="${r}assets/css/site.css">
+<link rel="stylesheet" href="${r}assets/css/site.css${landing ? "?v=2" : ""}">
 ${ld}
 </head>
 <body>
@@ -392,7 +392,6 @@ add('pilates-ramla', {
   <p class="muted">${esc(site.suitableNote)}</p>
   <section class="panel">${formHtml()}</section>
   <video class="lp-video" controls playsinline preload="none" width="720" height="720"><source src="${r}assets/videos/three-trainees.mp4" type="video/mp4"></video>
-  <section class="panel">${formHtml()}</section>
 </div>`
 });
 
