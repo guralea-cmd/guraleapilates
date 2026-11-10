@@ -232,3 +232,46 @@ main:has(.home-sec) { padding-bottom: 0; }
 .lp .lead-form input { font-size: 18px; min-height: 52px; padding: 12px 14px; }
 .lp .lead-form .btn { width: 100%; min-height: 58px; font-size: 22px; }
 .lp .form-status:empty { display: none; }
+
+/* 2.11.2026 Leah: photo + who I am on the landing page, like the workshop page */
+.lp .lp-me { display: flex; align-items: center; gap: 12px; text-align: right; margin: 16px auto 4px; max-width: 560px; }
+.lp .lp-me img { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; flex: 0 0 84px; border: 3px solid var(--red); }
+.lp .lp-me p { margin: 0; font-size: 17px; line-height: 1.45; font-weight: 600; }
+.lp .lp-me p strong { font-size: 19px; font-weight: 800; color: var(--red); }
+/* 2.11.2026 Leah: "who it suits" on the landing page as plain text with small dots, no rounded pills */
+.lp .pills { display: block; list-style: none; padding: 0; margin: 0 auto 6px; max-width: 560px; line-height: 1.6; }
+.lp .pills li { display: inline-block; white-space: nowrap; background: none; border: 0; padding: 0; border-radius: 0; font-size: 17px; }
+.lp .pills li { margin: 0 6px; }
+.lp .pills li::before { content: "•"; margin-left: 6px; color: var(--red); }
+/* 2.11.2026 Leah: the list in columns, top to bottom, 3 equal columns of 3 */
+.lp .pills.lp-cols { display: grid; grid-auto-flow: column; grid-template-rows: repeat(3, auto); justify-content: center; column-gap: 22px; row-gap: 2px; text-align: right; }
+.lp .pills.lp-cols li { margin: 0; }
+/* 2.11.2026 Leah: one line on what she does, above the list */
+.lp .lp-what { font-size: 17px; font-weight: 700; margin: 0 auto 10px; max-width: 560px; line-height: 1.45; }
+.lp .lp-also { margin-top: 4px; font-size: 16px; }
+
+/* landing: full phone-screen size (Leah 2.11) */
+.lp h1 { font-size: clamp(36px, 10vw, 46px); line-height: 1.15; }
+.lp-area { font-size: 20px; }
+.lp .lp-me { flex-direction: column; text-align: center; gap: 14px; }
+.lp .lp-me img { width: 150px; height: 150px; flex-basis: 150px; border-width: 5px; }
+.lp .lp-me p { font-size: 21px; line-height: 1.5; }
+.lp .lp-me p strong { font-size: 24px; }
+.lp h2 { font-size: 30px; }
+.lp .lp-what { font-size: 21px; line-height: 1.5; }
+.lp .lp-also { font-size: 21px; }
+.lp .pills.lp-cols { grid-template-rows: repeat(5, auto); column-gap: 28px; row-gap: 6px; }
+.lp .pills li { font-size: 21px; }
+.lp .form-title { font-size: 28px; }
+.lp .lead-form label { font-size: 21px; }
+.lp .lead-form input { font-size: 21px; min-height: 60px; }
+.lp .lead-form .btn { min-height: 66px; font-size: 26px; }
+.lp .pills.lp-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: stretch; column-gap: 12px; }
+.lp .pills.lp-cols li { white-space: normal; font-size: 20px; }
+
+/* 11.11.2026 Leah: the photo small, in a circle at the side (not full screen); certification line under the bio */
+.lp .lp-me { flex-direction: row; text-align: right; gap: 14px; align-items: center; }
+.lp .lp-me img { width: 92px; height: 92px; flex: 0 0 92px; border-width: 3px; }
+.lp .lp-me p { font-size: 18px; line-height: 1.45; }
+.lp .lp-me p strong { font-size: 20px; }
+.lp .lp-me .lp-cert { display: block; margin-top: 6px; font-weight: 800; color: var(--red); }
