@@ -275,3 +275,39 @@ main:has(.home-sec) { padding-bottom: 0; }
 .lp .lp-me p { font-size: 18px; line-height: 1.45; }
 .lp .lp-me p strong { font-size: 20px; }
 .lp .lp-me .lp-cert { display: block; margin-top: 6px; font-weight: 800; color: var(--red); }
+
+/* 11.11.2026 Leah: smaller, so the form shows up sooner on the phone; the list never breaks a line */
+.lp h1 { font-size: clamp(28px, 8vw, 36px); line-height: 1.15; margin-bottom: 6px; }
+.lp-area { font-size: 16px; margin: 0 0 6px; }
+.lp .lp-me { margin: 10px auto 4px; gap: 12px; }
+.lp .lp-me img { width: 76px; height: 76px; flex: 0 0 76px; }
+.lp .lp-me p { font-size: 15px; line-height: 1.4; }
+.lp .lp-me p strong { font-size: 16px; }
+.lp .lp-me .lp-cert { margin-top: 4px; }
+.lp h2 { font-size: 22px; margin: 14px 0 6px; }
+.lp .lp-what { font-size: 16px; line-height: 1.4; margin-bottom: 6px; }
+.lp .lp-also { font-size: 15px; margin-top: 2px; }
+.lp .pills.lp-cols { row-gap: 2px; column-gap: 10px; }
+.lp .pills.lp-cols li { white-space: nowrap; font-size: 15px; }
+.lp .muted { margin: 6px 0 10px; font-size: 14px; }
+.lp .form-title { font-size: 22px; }
+
+/* 11.11.2026 Leah: everything, including the whole form, fits on the first phone screen */
+.lp h1 { font-size: 24px; margin: 0 0 2px; }
+.lp-area { font-size: 13px; margin: 0 0 4px; }
+.lp .lp-me { margin: 4px auto 0; gap: 10px; }
+.lp .lp-me img { width: 58px; height: 58px; flex: 0 0 58px; border-width: 2px; }
+.lp .lp-me p { font-size: 12.5px; line-height: 1.35; }
+.lp .lp-me p strong { font-size: 13.5px; }
+.lp .lp-me .lp-cert { margin-top: 2px; }
+.lp h2 { font-size: 17px; margin: 8px 0 2px; }
+.lp .lp-what { font-size: 13px; line-height: 1.35; margin-bottom: 2px; }
+.lp .lp-also { font-size: 13px; margin: 0 auto 2px; }
+.lp .pills.lp-cols { row-gap: 0; }
+.lp .pills.lp-cols li { font-size: 13px; line-height: 1.45; }
+.lp .muted { margin: 2px 0 6px; font-size: 12px; }
+.lp .panel { padding: 10px 14px; margin-top: 4px; }
+.lp .form-title { font-size: 17px; margin: 0 0 4px; }
+.lp .lead-form label { font-size: 15px; margin: 2px 0; }
+.lp .lead-form input { font-size: 17px; min-height: 40px; padding: 6px 10px; }
+.lp .lead-form .btn { min-height: 46px; font-size: 20px; margin-top: 8px; }
