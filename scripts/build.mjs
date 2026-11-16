@@ -135,7 +135,7 @@ ${ld}
 <a class="skip" href="#main">דלג לתוכן הראשי</a>
 <header class="top">
   <div class="wrap top-inner">
-    <a class="logo" href="${r}">לאה גורא<span>פילאטיס מכשירים${landing ? " שיקומי ברמלה" : ""}</span></a>
+    <a class="logo" href="${r}">לאה גורא<span>פילאטיס מכשירים${landing ? " ברמלה" : ""}</span></a>
     ${landing ? '' : `<button class="menu-btn" aria-expanded="false" aria-controls="nav" aria-label="תפריט"><span></span><span></span><span></span></button>
     <nav id="nav" class="nav" aria-label="ניווט ראשי"><ul>${nav}</ul></nav>`}
 ${landing ? '' : `<div class="top-links">
@@ -385,13 +385,13 @@ add('contact', {
 const landingList = ['החלפת מפרק ירך וברך', 'פיברומיאלגיה', 'פריצות דיסק ובלט', 'כאבי גב', 'צפיפות עצם', 'עקמת', 'דלקות מפרקים', 'קושי בשיווי משקל', 'כתף קפואה'];
 add('pilates-ramla', {
   title: 'פילאטיס מכשירים ברמלה',
-  description: 'פילאטיס מכשירים שיקומי ברמלה עם לאה גורא - שיקום, עיצוב וחיטוב הגוף.',
+  description: 'פילאטיס מכשירים ברמלה עם לאה גורא - שיקום, עיצוב וחיטוב הגוף.',
   form: true,
   landing: true,
   body: (r) => `<div class="lp">
   <h1>החיים קצרים מדי בשביל שתסבלי</h1>
   <p class="lp-area">${esc(site.area)}</p>
-  <div class="lp-me"><img src="${r}assets/images/leah-landing-2026-11-11.jpg" alt="לאה גורא" width="84" height="84"><p><strong>אני לאה גורא, בת 72.</strong> בגיל 45 עברתי ניתוח לב פתוח ואירוע מוחי והייתי משותקת בחצי גוף. היום אני מאמנת כושר, מאמנת פילאטיס שיקומי ומנטורית לחוסן מנטלי.<span class="lp-cert">מוסמכת לשיקום סב אקוטי, משנת 2014.</span></p></div>
+  <div class="lp-me"><img src="${r}assets/images/leah-landing-2026-11-11.jpg" alt="לאה גורא" width="84" height="84"><p><strong>אני לאה גורא, בת 72.</strong> בגיל 45 עברתי ניתוח לב פתוח ואירוע מוחי והייתי משותקת בחצי גוף. היום אני מאמנת כושר, מאמנת פילאטיס ומנטורית לחוסן מנטלי.<span class="lp-cert">מוסמכת לשיקום סב אקוטי, משנת 2014.</span></p></div>
   <h2>למי זה מתאים</h2>
   <p class="lp-what">לכל מי שאף פעם לא התאמנה ולא זזה, ולכל מי שרוצה לחזק את השרירים, לרדת באחוזי שומן, להגמיש את הגוף ולהעלים את הכאבים.</p>
   <p class="lp-what lp-also">ובנוסף, גם לכל מי שמתמודדת עם:</p>
